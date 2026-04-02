@@ -70,3 +70,69 @@ Dado que FreeRTOS se apropia del SysTick, la capa HAL se queda sin su temporizad
 * **`Timer 4 (TIM4)`** se configura como la **Nueva Base de Tiempo (Timebase)** de la HAL.
 * Interrumpe cada 1 ms y, a través de su ISR (`TIM4_IRQHandler`), llama a `HAL_TIM_PeriodElapsedCallback()`.
 * Dentro de ese callback, se ejecuta `HAL_IncTick()`, lo que mantiene operativa a la HAL (y a funciones como `HAL_Delay`) de forma totalmente independiente del RTOS.
+
+---
+---
+
+# Arquitectura de la Aplicación con FreeRTOS
+
+Este documento describe la lógica de la aplicación de usuario construida sobre **FreeRTOS**. El proyecto implementa un **sistema basado en eventos** (Event-Triggered System) que consta de dos tareas principales: la lectura anti-rebote de un botón y el control de parpadeo de un LED.
+
+## 📁 1. Descripción General de los Archivos
+
+El código de la aplicación se divide en los siguientes archivos principales:
+
+* **`app.c`**: Es el punto de entrada de la aplicación en el entorno RTOS. Inicializa contadores de monitoreo y crea las tareas del sistema (`Task BTN` y `Task LED`).
+* **`task_btn.c`**: Contiene la lógica de la tarea del botón. Implementa una máquina de estados para filtrar el rebote mecánico (debounce) y genera eventos cuando detecta pulsaciones válidas.
+* **`task_led.c`**: Contiene la lógica de la tarea del LED. Implementa su propia máquina de estados para apagar o hacer parpadear el LED en respuesta a los eventos enviados por el botón.
+* **`task_led_interface.c`**: Actúa como una API interna para acoplar el emisor (Botón) con el receptor (LED), manejando la transmisión de eventos.
+* **`freertos.c`**: Contiene las implementaciones de los *Hooks* (funciones de enganche) de FreeRTOS, utilizados para métricas de CPU y detección de errores de memoria.
+
+---
+
+## ⚙️ 2. Inicialización y Tareas (`app.c`)
+
+En la función `app_init()` se configuran los elementos base de la aplicación:
+* **Contadores globales:** Se inicializan `g_app_tick_cnt`, `g_task_idle_cnt` y `g_app_stack_overflow_cnt` para monitoreo de rendimiento.
+* **Creación de tareas:** Se instancian las dos tareas principales mediante `xTaskCreate`.
+    * Ambas tienen el mismo tamaño de pila: `2 * configMINIMAL_STACK_SIZE`.
+    * Ambas comparten la misma prioridad: `tskIDLE_PRIORITY + 1ul`.
+
+---
+
+## 🔄 3. Máquinas de Estados
+
+El corazón de la aplicación funciona mediante máquinas de estados (Statecharts) que se ejecutan de forma continua en los bucles infinitos de cada tarea.
+
+### Tarea del Botón (`task_btn_statechart`)
+Evalúa el hardware y filtra ruidos eléctricos mediante 4 estados:
+1.  **`ST_BTN_XX_UP` (Reposo):** Espera a que el botón sea presionado (`EV_BTN_XX_DOWN`). Al detectarlo, guarda el *tick* actual y avanza de estado.
+2.  **`ST_BTN_XX_FALLING` (Debounce Presión):** Espera un retardo de `DEL_BTN_XX_MAX`. Si el botón sigue presionado, valida la acción, envía el evento `EV_LED_XX_BLINK` a la tarea del LED y avanza.
+3.  **`ST_BTN_XX_DOWN` (Presionado):** Espera a que el botón sea soltado (`EV_BTN_XX_UP`).
+4.  **`ST_BTN_XX_RISING` (Debounce Liberación):** Espera el retardo `DEL_BTN_XX_MAX`. Si el botón sigue suelto, valida la acción, envía el evento `EV_LED_XX_OFF` al LED y vuelve al estado inicial.
+
+### Tarea del LED (`task_led_statechart`)
+Reacciona a los eventos del botón para controlar el pin del microcontrolador:
+1.  **`ST_LED_XX_OFF` (Apagado):** Mantiene el LED apagado. Si recibe el evento `EV_LED_XX_BLINK`, enciende el LED, "baja" la bandera de nuevo evento y avanza.
+2.  **`ST_LED_XX_BLINK` (Parpadeo):** * Si recibe `EV_LED_XX_OFF`, apaga el pin y vuelve al estado `ST_LED_XX_OFF`.
+    * Mientras no reciba la orden de apagado, invierte el estado del pin (`HAL_GPIO_TogglePin`) cada vez que transcurre el tiempo `DEL_LED_XX_MAX`, creando el efecto de parpadeo continuo.
+
+---
+
+## 📡 4. Comunicación entre Tareas (`task_led_interface.c`)
+
+Para que la tarea del botón se comunique con la tarea del LED, se utiliza una interfaz dedicada:
+* La función **`put_event_task_led(task_led_ev_t event)`** recibe el evento a transmitir.
+* Sobrescribe una estructura global compartida asignando el nuevo evento a `task_led_dta.event`.
+* Levanta un aviso asignando `task_led_dta.flag = true`.
+> **Nota de Diseño:** Al tener ambas tareas la misma prioridad y operar de forma cooperativa, este método de variables globales funciona correctamente. Para escalar a sistemas más complejos o con distintas prioridades, se recomienda migrar a *Queues* (Colas) de FreeRTOS.
+
+---
+
+## 🛠️ 5. Monitoreo y Hooks (`freertos.c`)
+
+El sistema aprovecha los *callbacks* automáticos de FreeRTOS para perfilar la aplicación:
+
+* **`vApplicationIdleHook()`:** Se ejecuta cuando el procesador está inactivo. Incrementa `g_task_idle_cnt`. Permite calcular el porcentaje de uso de la CPU.
+* **`vApplicationTickHook()`:** Se ejecuta en cada interrupción del sistema (ej. cada 1 ms). Incrementa `g_app_tick_cnt`.
+* **`vApplicationStackOverflowHook()`:** Mecanismo de seguridad crítica. Si una tarea excede su memoria RAM asignada, esta función detiene el sistema (`configASSERT( 0 )`) e incrementa `g_app_stack_overflow_cnt` para facilitar la depuración.
