@@ -2,7 +2,7 @@
 FIUBA - Electrónica - Sistemas Operativos Embebidos - Trabajo Práctico N°: 1 – Tareas de FreeRTOS
 # FIUBA - Electrónica - Sistemas Operativos Embebidos
 ## Trabajo Práctico N°: 1 - Tareas de FreeRTOS
-### Año-Cuatrimestre - Curso-Grupo
+### 2026-1erC - 1-03
 ### Responsable de la entrega:
 | Padrón | Apellidos, Nombres | Fecha | Deadline |
 | :----- | :--------------------- | :------: | :-------: |
