@@ -9,9 +9,7 @@ FIUBA - Electrónica - Sistemas Operativos Embebidos - Trabajo Práctico N°: 1 
 | XXXXXX | YYYY, ZZZ | | Semana 04 |
 
 
-# Análisis de Proyecto STM32 con FreeRTOS
-
-Este documento describe la arquitectura, el flujo de ejecución y la configuración de temporizadores de un proyecto basado en un microcontrolador **STM32F103** utilizando **FreeRTOS** y la biblioteca **HAL** de STMicroelectronics.
+# /Core
 
 ## 📁 1. Descripción de los Archivos Fuente
 
@@ -74,9 +72,7 @@ Dado que FreeRTOS se apropia del SysTick, la capa HAL se queda sin su temporizad
 ---
 ---
 
-# Arquitectura de la Aplicación con FreeRTOS
-
-Este documento describe la lógica de la aplicación de usuario construida sobre **FreeRTOS**. El proyecto implementa un **sistema basado en eventos** (Event-Triggered System) que consta de dos tareas principales: la lectura anti-rebote de un botón y el control de parpadeo de un LED.
+# /app
 
 ## 📁 1. Descripción General de los Archivos
 
@@ -136,3 +132,20 @@ El sistema aprovecha los *callbacks* automáticos de FreeRTOS para perfilar la a
 * **`vApplicationIdleHook()`:** Se ejecuta cuando el procesador está inactivo. Incrementa `g_task_idle_cnt`. Permite calcular el porcentaje de uso de la CPU.
 * **`vApplicationTickHook()`:** Se ejecuta en cada interrupción del sistema (ej. cada 1 ms). Incrementa `g_app_tick_cnt`.
 * **`vApplicationStackOverflowHook()`:** Mecanismo de seguridad crítica. Si una tarea excede su memoria RAM asignada, esta función detiene el sistema (`configASSERT( 0 )`) e incrementa `g_app_stack_overflow_cnt` para facilitar la depuración.
+
+---
+
+## 🎯 6. Conclusión: ¿Qué hace esta aplicación?
+
+En resumen, basándonos en el análisis de todo el código fuente (desde el arranque por hardware hasta la capa de aplicación), este proyecto implementa un **sistema embebido interactivo, robusto y guiado por eventos**, diseñado para un microcontrolador STM32F103 ejecutando el sistema operativo FreeRTOS.
+
+A nivel funcional, el sistema realiza lo siguiente:
+1. **Monitoreo de Usuario:** Escucha continuamente el estado de un pulsador físico (Botón).
+2. **Filtrado Inteligente:** Aplica un algoritmo de *debounce* (anti-rebote) por software, mediante una máquina de estados, para ignorar el ruido eléctrico y detectar pulsaciones y liberaciones limpias y reales.
+3. **Respuesta Visual Controlada:** * Al confirmar que el botón fue **presionado**, el sistema activa el LED y lo hace **parpadear** de forma continua.
+   * Al confirmar que el botón fue **soltado**, el sistema interrumpe el parpadeo, **apaga** el LED y vuelve a su estado de reposo.
+
+A nivel arquitectónico, el proyecto demuestra excelentes prácticas de diseño de software para sistemas RTOS:
+* **Desacoplamiento:** Separa claramente la configuración del hardware de bajo nivel (HAL y relojes), la gestión del sistema operativo (temporizadores SysTick, TIM2 y TIM4) y la lógica de negocio (aplicación de usuario).
+* **Concurrencia No Bloqueante:** Divide las responsabilidades en hilos independientes (`Task BTN` y `Task LED`) que operan de forma concurrente y se comunican a través de una interfaz definida. Utiliza el tiempo del sistema (`xTaskGetTickCount`) para medir retardos, evitando el uso de funciones bloqueantes (como `HAL_Delay`) que desperdiciarían ciclos de CPU.
+* **Robustez y Perfilado:** Aprovecha las herramientas de FreeRTOS (*Hooks* y contadores) para medir el uso real del procesador, registrar el rendimiento del sistema y vigilar fallos críticos como el desbordamiento de memoria RAM (*Stack Overflow*), garantizando la estabilidad y facilitando la depuración a largo plazo.
