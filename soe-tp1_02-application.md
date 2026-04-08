@@ -51,13 +51,14 @@ void Tarea(void const * argumento)
 Utilizando la API de CMSIS-OS, se hace en dos pasos: se define la estructura y luego se crean las instancias.
 
 ```c
-// 1. Definición de la estructura de la tarea 
-// (nombre, función, prioridad, instancias, tamaño de pila)
-osThreadDef(Tarea1, MiTarea, osPriorityNormal, 0, 128);
+// 1. Declaramos los "Handles" (identificadores) para cada instancia
+TaskHandle_t instancia1;
+TaskHandle_t instancia2;
 
 // 2. Creación de las instancias
-osThreadId instancia1 = osThreadCreate(osThread(Tarea1), (void*) 1);
-osThreadId instancia2 = osThreadCreate(osThread(Tarea1), (void*) 2);
+// Parámetros: Función, Nombre, Tamaño Pila, Argumento, Prioridad, Puntero al Handle
+xTaskCreate(MiTarea, "Tarea 1", 128, (void*) 1, tskIDLE_PRIORITY + 1, &instancia1);
+xTaskCreate(MiTarea, "Tarea 2", 128, (void*) 2, tskIDLE_PRIORITY + 1, &instancia2);
 ```
 
 ---
@@ -67,9 +68,9 @@ osThreadId instancia2 = osThreadCreate(osThread(Tarea1), (void*) 2);
 Para destruir una tarea y liberar sus recursos:
 
 ```c
-// Para eliminar una tarea indicando su ID:
-osThreadTerminate(instancia1);
+// Para eliminar una tarea específica indicando su Handle:
+vTaskDelete(instancia1);
 
-// Para que la tarea se elimine a sí misma:
-osThreadTerminate(NULL);
+// Para que la tarea se elimine a sí misma (se llama dentro de su propio código):
+vTaskDelete(NULL);
 ```
