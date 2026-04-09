@@ -74,3 +74,17 @@ vTaskDelete(instancia1);
 // Para que la tarea se elimine a sí misma (se llama dentro de su propio código):
 vTaskDelete(NULL);
 ```
+---
+
+## Paso 03: Modificación de Prioridades Relativas (task_btn y task_led)
+
+**Configuración realizada:**
+Se modificaron las prioridades de las tareas en el archivo, alternando los niveles de prioridad entre `task_btn` y `task_led`.
+
+**Observaciones del comportamiento:**
+* **Prioridad `task_btn` > `task_led`:** El sistema responde de manera inmediata a la pulsación del botón. Como la tarea del botón tiene mayor prioridad, el planificador (scheduler) le otorga el procesador apenas se detecta el evento (o termina su tiempo de bloqueo), desplazando a la tarea del LED si fuera necesario.
+* **Prioridad `task_led` > `task_btn`:** Si la tarea del LED realiza operaciones intensivas sin bloquearse (ej. bucles de delay por software en lugar de osDelay), se observa una degradación en la respuesta del botón. El botón solo se procesa cuando la tarea del LED entra en estado Blocked.
+* **Conclusión:** Se comprobó que las prioridades relativas definen el determinismo del sistema. Para funciones de interfaz de usuario (como botones), una prioridad más alta mejora la experiencia de uso.
+
+---
+
