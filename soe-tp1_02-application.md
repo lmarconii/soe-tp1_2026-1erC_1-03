@@ -88,3 +88,9 @@ Se modificaron las prioridades de las tareas en el archivo, alternando los nivel
 
 ---
 
+## Paso 04: Instanciación Múltiple y Eliminación de Tareas
+
+**Descripción del ejercicio:**
+Se crearon tres instancias independientes de la tarea `task_btn` utilizando la misma función de entrada, pero con diferentes manejadores (*handles*) y estructuras de atributos.
+
+**Comportamiento observado:**
