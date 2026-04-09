@@ -91,6 +91,13 @@ Se modificaron las prioridades de las tareas en el archivo, alternando los nivel
 ## Paso 04: Instanciación Múltiple y Eliminación de Tareas
 
 **Descripción del ejercicio:**
-Se crearon tres instancias independientes de la tarea `task_btn` utilizando la misma función de entrada, pero con diferentes manejadores (*handles*) y estructuras de atributos.
+Se crearon tres instancias independientes de la tarea `task_btn` utilizando la misma función de entrada, pero con diferentes manejadores (*handles*) y estructuras de atributos. 
+Se configuró la tarea `task_led` para que, bajo una condición específica (después del parpadeo), ejecute la función de eliminación sobre una de las instancias del botón ().
 
 **Comportamiento observado:**
+1. **Btn:** Al ejecutar el sistema, las tres instancias de la tarea compiten por el recurso del botón. Cada una mantiene su propio contexto de ejecución (stack), aunque ejecutan el mismo código lógico.
+2. **Led:** Una vez que `task_led` elimina la instancia, se libera la memoria del Stack y el Control Block (TCB) de dicha tarea. El sistema continúa funcionando con las dos instancias restantes, demostrando la capacidad de FreeRTOS para gestionar el ciclo de vida de los hilos de ejecución en tiempo de ejecución.
+
+**Conclusión:** La creación de múltiples instancias permite reutilizar código para periféricos similares, mientras que la eliminación de tareas es útil para gestionar procesos temporales, optimizando el uso de la memoria RAM del microcontrolador.
+
+---
