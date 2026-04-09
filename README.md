@@ -7,5 +7,5 @@ FIUBA - Electrónica - Sistemas Operativos Embebidos - Trabajo Práctico N°: 1 
 | Padrón | Apellidos, Nombres | Fecha | Deadline |
 | :----- | :--------------------- | :------: | :-------: |
 | XXXXXX | YYYY, ZZZ | | Semana 04 |
-| XXXXXX | YYYY, ZZZ | | Semana 04 |
+| 109308 | Marconi Casares, Lourdes | | Semana 04 |
 | 109324 | Solari Parravicini, Facundo | | Semana 04 |
