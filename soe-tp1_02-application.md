@@ -90,7 +90,7 @@ Se modificaron las prioridades de las tareas en el archivo, alternando los nivel
 
 ## Paso 04: Instanciación Múltiple y Eliminación de Tareas
 
-**Descripción del ejercicio:**
+**Configuración realizada:**
 Se crearon tres instancias independientes de la tarea `task_btn` utilizando la misma función de entrada, pero con diferentes manejadores (*handles*) y estructuras de atributos. 
 Se configuró la tarea `task_led` para que, bajo una condición específica (después del parpadeo), ejecute la función de eliminación sobre una de las instancias del botón ().
 
