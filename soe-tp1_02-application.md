@@ -92,7 +92,7 @@ Se modificaron las prioridades de las tareas en el archivo, alternando los nivel
 
 **Configuración realizada:**
 Se crearon tres instancias independientes de la tarea `task_btn` utilizando la misma función de entrada, pero con diferentes manejadores (*handles*) y estructuras de atributos. 
-Se configuró la tarea `task_led` para que, bajo una condición específica (después del parpadeo), ejecute la función de eliminación sobre una de las instancias del botón ().
+Se configuró la tarea `task_led` para que, bajo una condición específica (después del parpadeo), ejecute la función de eliminación sobre una de las instancias del botón (`task_btn_2').
 
 **Comportamiento observado:**
 1. **Btn:** Al ejecutar el sistema, las tres instancias de la tarea compiten por el recurso del botón. Cada una mantiene su propio contexto de ejecución (stack), aunque ejecutan el mismo código lógico.
