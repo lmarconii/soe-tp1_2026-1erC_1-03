@@ -1,1 +1,5 @@
+### ¿Cómo usar el parámetro de Tarea?
+Se utiliza el puntero `void *argument` en la función de creación. Esto permite pasar estructuras o variables a la tarea al momento de su inicio, permitiendo que una misma función de tarea gestione diferentes recursos según el parámetro recibido.
 
+### ¿Cómo cambiar la prioridad de una Tarea ya creada?
+Se utiliza la función `osThreadSetPriority()` pasando el *Handle* de la tarea y el nuevo nivel de prioridad. Esto permite que el sistema operativo se adapte dinámicamente a las necesidades de procesamiento en tiempo real.
