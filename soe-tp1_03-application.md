@@ -6,3 +6,20 @@ Dentro de la función de la tarea, este puntero se castea al tipo de dato corres
 
 ### ¿Cómo cambiar la prioridad de una Tarea ya creada?
 Se utiliza la función `osThreadSetPriority()` pasando el *Handle* de la tarea y el nuevo nivel de prioridad. Si le subís la prioridad a una tarea y esta está lista para ejecutarse, el Scheduler hará un cambio de contexto inmediatamente, deteniendo lo que esté haciendo para atender a la tarea que ahora es más importante. Esto permite que el sistema operativo se adapte dinámicamente a las necesidades de procesamiento en tiempo real.
+
+---
+
+## Paso 03: Gestión de múltiples botones mediante el Parámetro de Tarea
+**Configuración realizada:**
+
+
+**Comportamiento observado:**
+
+---
+
+## Paso 04: Modificación Dinámica de Prioridades en task_led
+**Configuración realizada:**
+
+
+**Comportamiento observado:**
+
