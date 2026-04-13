@@ -1,5 +1,4 @@
-
-# Explicación del contenido en: /Core
+# Respuesta de Gemini - Explicación del contenido en: /Core
 
 ## 📁 1. Descripción de los Archivos Fuente
 
@@ -139,3 +138,13 @@ A nivel arquitectónico, el proyecto demuestra excelentes prácticas de diseño 
 * **Desacoplamiento:** Separa claramente la configuración del hardware de bajo nivel (HAL y relojes), la gestión del sistema operativo (temporizadores SysTick, TIM2 y TIM4) y la lógica de negocio (aplicación de usuario).
 * **Concurrencia No Bloqueante:** Divide las responsabilidades en hilos independientes (`Task BTN` y `Task LED`) que operan de forma concurrente y se comunican a través de una interfaz definida. Utiliza el tiempo del sistema (`xTaskGetTickCount`) para medir retardos, evitando el uso de funciones bloqueantes (como `HAL_Delay`) que desperdiciarían ciclos de CPU.
 * **Robustez y Perfilado:** Aprovecha las herramientas de FreeRTOS (*Hooks* y contadores) para medir el uso real del procesador, registrar el rendimiento del sistema y vigilar fallos críticos como el desbordamiento de memoria RAM (*Stack Overflow*), garantizando la estabilidad y facilitando la depuración a largo plazo.
+
+---
+
+# Observaciones Propias
+
+- Al depurar el proyecto, la ejecución de las tareas queda asentada en la consola (`Task LED is running` y `Task BTN is running`).
+
+- El comportamiento es tal que el LED (el incluido en la propia placa) permanece apagado mientras el botón azul no es presionado. Cuando este se presiona (`Task BTN - BTN PRESSED`), el LED comienza a parpadear (`Task LED - LED BLINK`) invirtiendo su estado cada segundo, hasta que se suelte. Ambas tareas tienen la misma prioridad, por lo que pueden desempeñar sus funciones correctamente y "en simultáneo" (se le asigna tiempo de CPU a ambas).
+
+- Lo observado, por lo tanto, coincide con las respuestas de Gemini.
