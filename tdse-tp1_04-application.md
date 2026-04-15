@@ -20,3 +20,6 @@ La tarea **IDLE** es creada automáticamente por el kernel de FreeRTOS cuando se
   2. **Modo de bajo consumo (Low Power):** Se puede utilizar para poner al microcontrolador en modo "Sleep" o "Stop" mientras no hay trabajo, ahorrando energía.
   3. **Estadísticas:** Para medir la carga de la CPU (cuanto más tiempo pase el sistema en la tarea IDLE, menos cargado está el procesador).
   4. **Idle Hook:** Se puede configurar una función "Hook" (un callback) que se ejecute automáticamente cada vez que la tarea IDLE tome el control.
+
+ ---
+ 
