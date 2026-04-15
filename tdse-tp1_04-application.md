@@ -22,4 +22,25 @@ La tarea **IDLE** es creada automáticamente por el kernel de FreeRTOS cuando se
   4. **Idle Hook:** Se puede configurar una función "Hook" (un callback) que se ejecute automáticamente cada vez que la tarea IDLE tome el control.
 
  ---
- 
+ ## Procesamiento periódico del Led
+
+**Configuración realizada:**
+
+Abc
+
+**Comportamiento observado:**
+
+Abc
+
+---
+
+## Procesamiento periódico del Btn
+
+**Configuración realizada:**
+
+Abc
+
+
+**Comportamiento observado:**
+
+Abc
