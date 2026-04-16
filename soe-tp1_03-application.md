@@ -13,7 +13,11 @@ Se utiliza la función `vTaskPrioritySet()` pasando el *Handle* de la tarea y el
 
 **Configuración realizada:**
 
-Abc
+* Definir los puertos correspondientes en el archivo `.ioc`.
+* Declarar un `enum` de IDs de botones en `task_btn_attribute.h` e incluir este archivo en `task_btn.h`, para que `app.c` tenga acceso a ambos y al `enum`.
+* Enviar por parámetro de cada task desde `app.c` el valor de ID correspondiente al botón a utilizar, haciendo uso del `enum` y con un casteo a `(void *)`.
+* Modificar la variable `task_btn_dta` a `task_btn_dta_list[]` para poder pasar de tener una estructura a tener una lista de estructuras.
+* Adaptar la función `task_btn_statechart()` para que funcione con la lista de estructuras, pasándole un `index` para que sepa a cuál botón manipular.
 
 **Comportamiento observado:**
 
@@ -22,6 +26,16 @@ Abc
 ---
 
 ## Modificación Dinámica de Prioridades en `task_led`
+
+* Elevar la prioridad inicial de ambas instancias de los leds. Luego una vez inicializadas, incluir la linea de codigo: `vTaskPrioritySet(NULL, 1)` asi cada una se autoasigna la prioridad original.
+
+Para adaptar el proyecto para incluir multiples leds:
+
+* Definir los puertos correspondientes en el archivo `.ioc`.
+* Declarar un `enum` de IDs de leds en `task_led_attribute.h` e incluir este archivo en `task_led.h`, para que `app.c` tenga acceso a ambos y al `enum`.
+* Enviar por parámetro de cada task desde `app.c` el valor de ID correspondiente al led a utilizar, haciendo uso del `enum` y con un casteo a `(void *)`.
+* Modificar la variable `task_btn_dta` a `task_btn_dta_list[]` para poder pasar de tener una estructura a tener una lista de estructuras.
+* Adaptar la función `task_btn_statechart()` para que funcione con la lista de estructuras, pasándole un `index` para que sepa a cuál botón manipular.
 
 **Configuración realizada:**
 
