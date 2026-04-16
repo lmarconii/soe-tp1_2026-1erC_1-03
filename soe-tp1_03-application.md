@@ -27,6 +27,8 @@ Abc
 
 ## Modificación Dinámica de Prioridades en `task_led`
 
+**Configuración realizada:**
+
 * Elevar la prioridad inicial de ambas instancias de los leds. Luego una vez inicializadas, incluir la linea de codigo: `vTaskPrioritySet(NULL, 1)` asi cada una se autoasigna la prioridad original.
 
 Para adaptar el proyecto para incluir multiples leds:
@@ -37,11 +39,6 @@ Para adaptar el proyecto para incluir multiples leds:
 * Modificar la variable `task_btn_dta` a `task_btn_dta_list[]` para poder pasar de tener una estructura a tener una lista de estructuras.
 * Adaptar la función `task_btn_statechart()` para que funcione con la lista de estructuras, pasándole un `index` para que sepa a cuál botón manipular.
 
-**Configuración realizada:**
-
-Abc
-
-
 **Comportamiento observado:**
 
-Abc
+* Las tareas correspondientes a los LEDs se ejecutan antes que la de los botones debido a que comienzan la ejecución con una prioridad `2`. Luego de su primera ejecución, las prioridades de las tareas de los LEDs se degradan a `1`, teniendo así, la misma prioridad que el resto de tareas (exceptuando la tarea IDLE).
