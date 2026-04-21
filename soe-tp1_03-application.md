@@ -19,10 +19,6 @@ Se utiliza la función `vTaskPrioritySet()` pasando el *Handle* de la tarea y el
 * Modificar la variable `task_btn_dta` a `task_btn_dta_list[]` para poder pasar de tener una estructura a tener una lista de estructuras.
 * Adaptar la función `task_btn_statechart()` para que funcione con la lista de estructuras, pasándole un `index` para que sepa a cuál botón manipular.
 
-**Comportamiento observado:**
-
-Abc
-
 ---
 
 ## Modificación Dinámica de Prioridades en `task_led`
