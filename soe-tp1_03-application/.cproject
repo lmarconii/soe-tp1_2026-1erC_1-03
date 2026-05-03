@@ -197,14 +197,6 @@
 		<project id="tdse-tp0_05-hw_sw_test.null.715541012" name="tdse-tp0_05-hw_sw_test"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1074384094;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.debug.1074384094.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1238378363;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.73663070">
-			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.406667446;com.st.stm32cube.ide.mcu.gnu.managedbuild.config.exe.release.406667446.;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.1578964172;com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.2071142904">
-			<autodiscovery enabled="false" problemReportingEnabled="true" selectedProfileId=""/>
-		</scannerConfigBuildInfo>
-	</storageModule>
 	<storageModule moduleId="refreshScope"/>
+	<storageModule moduleId="scannerConfiguration"/>
 </cproject>
